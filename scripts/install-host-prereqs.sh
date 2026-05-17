@@ -61,9 +61,29 @@ fi
 
 echo "Host prerequisites installed."
 
-if ! command -v docker >/dev/null 2>&1; then
+docker_gpu_ready() {
+    if ! command -v docker >/dev/null 2>&1; then
+        return 1
+    fi
+    if ! command -v nvidia-ctk >/dev/null 2>&1; then
+        return 1
+    fi
+    if ! sudo docker info >/dev/null 2>&1; then
+        return 1
+    fi
+    if ! sudo docker info --format '{{json .Runtimes}}' 2>/dev/null | grep -q '"nvidia"'; then
+        return 1
+    fi
+    return 0
+}
+
+if [ "${HERMES_SKIP_DOCKER_SETUP:-0}" = "1" ]; then
     echo
-    echo "Docker was not found. A local vLLM container is required for Omni."
-    echo "For a clean Ubuntu host, run:"
-    echo "  bash scripts/install-docker-nvidia-toolkit.sh"
+    echo "[prereqs] Skipping Docker/NVIDIA Container Toolkit setup because HERMES_SKIP_DOCKER_SETUP=1"
+elif docker_gpu_ready; then
+    echo "[prereqs] Docker and NVIDIA Container Toolkit are already configured."
+else
+    echo
+    echo "[prereqs] Installing/configuring Docker and NVIDIA Container Toolkit for local vLLM."
+    bash "$SCRIPT_DIR/install-docker-nvidia-toolkit.sh"
 fi

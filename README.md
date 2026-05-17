@@ -35,15 +35,35 @@ Install host prerequisites and launch the first run:
 ./install.sh
 ```
 
-The installer prompts for sudo when needed. Passwordless sudo is not required, but first-time setup must run from an interactive terminal or SSH session with a TTY.
+The installer prompts for sudo when needed. Passwordless sudo is not required,
+but first-time setup must run from an interactive terminal or SSH session with a
+TTY.
 
-If Docker with NVIDIA GPU support is not already installed, run this once:
+On a clean Spark, the installer also configures Docker for the local vLLM model
+container:
+
+- installs Docker Engine if missing
+- adds the local user to the `docker` group
+- runs Docker commands through `newgrp docker` for the current install when
+  group membership has not refreshed yet
+- installs NVIDIA Container Toolkit
+- runs `sudo nvidia-ctk runtime configure --runtime=docker`
+- restarts Docker
+- verifies `docker run --rm --gpus all ubuntu nvidia-smi`
+
+After the first install, open a new terminal or run:
 
 ```bash
-bash scripts/install-docker-nvidia-toolkit.sh
+newgrp docker
 ```
 
-Then run `./install.sh` again.
+That lets normal Docker commands work without `sudo` in your interactive shell.
+If you already manage Docker/NVIDIA Container Toolkit yourself, skip this repo's
+Docker setup with:
+
+```bash
+HERMES_SKIP_DOCKER_SETUP=1 ./install.sh
+```
 
 ## Hugging Face Model
 
@@ -169,5 +189,6 @@ By default the web UI uses the direct local backend for responsiveness. The Open
 
 - This repo does not require NemoClaw or OpenShell.
 - Docker/NVIDIA Container Toolkit are required because the Omni model is served by vLLM in a GPU container.
+- The Docker/NVIDIA setup follows Docker's non-root-user flow (`docker` group plus `newgrp docker`) and NVIDIA's Docker runtime configuration flow (`nvidia-ctk runtime configure --runtime=docker`).
 - The `gemma4:latest` Ollama model is used as the OpenClaw orchestrator because it stays responsive while the Omni vLLM container is loaded. The profile caps the orchestrator context at 8192 tokens by default to avoid starving the Omni container. Override with `OPENCLAW_OLLAMA_MODEL=...` or `OPENCLAW_OLLAMA_CONTEXT_WINDOW=...` if you want to test another local Ollama setup.
 - The first vLLM startup can take several minutes and uses most of the Spark GPU memory.

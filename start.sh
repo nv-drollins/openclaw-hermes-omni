@@ -27,6 +27,50 @@ require_cmd() {
     fi
 }
 
+select_docker_mode() {
+    if docker ps >/dev/null 2>&1; then
+        DOCKER_MODE="direct"
+        return 0
+    fi
+
+    if command -v newgrp >/dev/null 2>&1 && getent group docker 2>/dev/null | tr ':,' '  ' | tr ' ' '\n' | grep -qx "${USER:-}"; then
+        DOCKER_MODE="newgrp"
+        return 0
+    fi
+
+    if command -v sudo >/dev/null 2>&1; then
+        DOCKER_MODE="sudo"
+        return 0
+    fi
+
+    echo "Docker is installed, but this shell cannot access it." >&2
+    echo "Run: newgrp docker" >&2
+    echo "Or open a new terminal after being added to the docker group." >&2
+    exit 1
+}
+
+docker_cmd() {
+    local cmd
+    case "${DOCKER_MODE:-}" in
+        direct)
+            docker "$@"
+            ;;
+        newgrp)
+            printf -v cmd '%q ' docker "$@"
+            newgrp docker <<EOF
+$cmd
+EOF
+            ;;
+        sudo)
+            sudo docker "$@"
+            ;;
+        *)
+            select_docker_mode
+            docker_cmd "$@"
+            ;;
+    esac
+}
+
 wait_for_vllm() {
     echo "Waiting for local vLLM on port $VLLM_PORT..."
     for _ in $(seq 1 120); do
@@ -58,13 +102,15 @@ start_vllm() {
         exit 1
     fi
 
-    if docker ps -a --format '{{.Names}}' | grep -qx "$VLLM_CONTAINER"; then
+    select_docker_mode
+
+    if docker_cmd ps -a --format '{{.Names}}' | grep -qx "$VLLM_CONTAINER"; then
         echo "Removing stale vLLM container: $VLLM_CONTAINER"
-        docker rm -f "$VLLM_CONTAINER" >/dev/null
+        docker_cmd rm -f "$VLLM_CONTAINER" >/dev/null
     fi
 
     echo "Starting local Nemotron Omni vLLM container..."
-    docker run -d \
+    docker_cmd run -d \
         --gpus all \
         --ipc=host \
         -p "${VLLM_PORT}:8000" \

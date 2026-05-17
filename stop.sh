@@ -9,6 +9,47 @@ STOP_GATEWAY="${STOP_GATEWAY:-true}"
 VLLM_CONTAINER="${VLLM_CONTAINER:-vllm-nemotron-omni}"
 RUN_DIR="${RUN_DIR:-$ROOT/.run}"
 
+select_docker_mode() {
+    if docker ps >/dev/null 2>&1; then
+        DOCKER_MODE="direct"
+        return 0
+    fi
+
+    if command -v newgrp >/dev/null 2>&1 && getent group docker 2>/dev/null | tr ':,' '  ' | tr ' ' '\n' | grep -qx "${USER:-}"; then
+        DOCKER_MODE="newgrp"
+        return 0
+    fi
+
+    if command -v sudo >/dev/null 2>&1; then
+        DOCKER_MODE="sudo"
+        return 0
+    fi
+
+    return 1
+}
+
+docker_cmd() {
+    local cmd
+    case "${DOCKER_MODE:-}" in
+        direct)
+            docker "$@"
+            ;;
+        newgrp)
+            printf -v cmd '%q ' docker "$@"
+            newgrp docker <<EOF
+$cmd
+EOF
+            ;;
+        sudo)
+            sudo docker "$@"
+            ;;
+        *)
+            select_docker_mode
+            docker_cmd "$@"
+            ;;
+    esac
+}
+
 stop_web() {
     local pids=""
     if [[ -f "$RUN_DIR/web.pid" ]]; then
@@ -62,9 +103,9 @@ stop_model() {
         echo "STOP_MODEL=false; leaving vLLM running."
         return 0
     fi
-    if command -v docker >/dev/null 2>&1 && docker ps -a --format '{{.Names}}' | grep -qx "$VLLM_CONTAINER"; then
+    if command -v docker >/dev/null 2>&1 && select_docker_mode && docker_cmd ps -a --format '{{.Names}}' | grep -qx "$VLLM_CONTAINER"; then
         echo "Stopping local vLLM container: $VLLM_CONTAINER"
-        docker stop "$VLLM_CONTAINER" >/dev/null 2>&1 || true
+        docker_cmd stop "$VLLM_CONTAINER" >/dev/null 2>&1 || true
     else
         echo "No vLLM container found: $VLLM_CONTAINER"
     fi

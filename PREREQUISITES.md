@@ -28,12 +28,20 @@ bash scripts/install-host-prereqs.sh
 - Ollama 0.22.1 or newer enough to serve `gemma4:latest`.
 - Docker Engine.
 - NVIDIA Container Toolkit configured for Docker GPU containers.
+- Local user in the `docker` group for non-root Docker commands.
 
-Docker/GPU container support can be installed with:
+Docker/GPU container support is installed automatically by `./install.sh` when
+missing. You can also run it directly:
 
 ```bash
 bash scripts/install-docker-nvidia-toolkit.sh
 ```
+
+That helper adds the current user to the `docker` group, uses `newgrp docker`
+for Docker checks during the current run when needed, configures Docker with
+`sudo nvidia-ctk runtime configure --runtime=docker`, restarts Docker, and runs
+a GPU container check. Open a new terminal or run `newgrp docker` after the
+first install so your interactive shell sees the new Docker group membership.
 
 ## Models
 

@@ -244,6 +244,7 @@ main() {
 
   log "Done. Docker and NVIDIA Container Toolkit are installed and Docker is configured for GPU containers."
   log "Open a new terminal before relying on docker group membership outside this script."
+  log "To refresh this interactive shell manually, run: newgrp docker"
 }
 
 main "$@"
