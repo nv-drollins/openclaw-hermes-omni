@@ -47,10 +47,14 @@ first install so your interactive shell sees the new Docker group membership.
 
 - Ollama: `gemma4:latest`
 - vLLM checkpoint: `nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4`
+  - Requires a Hugging Face token.
+  - May require accepting model terms on Hugging Face before download.
+  - Downloads about 22 GB into `$HOME/models/nemotron-3-nano-omni-nvfp4`.
 
 The Hugging Face model may be gated. Export `HF_TOKEN` before running:
 
 ```bash
+export HF_TOKEN="hf_..."
 bash scripts/download-model.sh
 ```
 

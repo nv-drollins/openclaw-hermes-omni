@@ -19,6 +19,24 @@ The runtime model id is:
 nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
 ```
 
+## Before You Start
+
+This demo requires a Hugging Face token and a large local checkpoint download.
+
+- Hugging Face token required: set `HF_TOKEN` before downloading.
+- Model access may be gated: accept the model terms for
+  `nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4` if the download is
+  denied.
+- Download size: about 22 GB for the local Omni checkpoint.
+- Destination: `$HOME/models/nemotron-3-nano-omni-nvfp4`.
+
+Download the model before the first full start:
+
+```bash
+export HF_TOKEN="hf_..."
+bash scripts/download-model.sh
+```
+
 ## First Deploy
 
 Run these commands on the Spark or target Ubuntu host:
