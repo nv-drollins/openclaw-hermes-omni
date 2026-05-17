@@ -171,14 +171,36 @@ Run a native OpenClaw skill-routing test:
 bash scripts/run-openclaw-smoke.sh
 ```
 
+## Sample Assets
+
+This repo includes sample media for staff-led attendee installs. After cloning,
+the files are available under:
+
+```text
+sample-assets/
+```
+
+Included files:
+
+- `sample-assets/gb10-board-image.png`
+- `sample-assets/gb10-partner-overview.pdf`
+- `sample-assets/gb10-demo-walkthrough-1080p.mp4`
+
+Use these when walking an attendee through the UI so they do not need to supply
+their own image, document, or video. The video is a 1920x1080 sample.
+
 ## Demo Flow
 
-For a short walkthrough:
+For a short walkthrough on an attendee machine:
 
-1. Upload an image and ask: `Describe this image.`
-2. Upload a PDF and ask: `Summarize the document and list the key facts.`
-3. Upload a video and ask: `Describe what happens in this clip.`
-4. Ask: `Can this host reach nvidia.com?`
+1. Open the UI at `http://<spark-ip>:8765`.
+2. Upload `sample-assets/gb10-board-image.png`.
+3. Ask: `Describe this image and call out the main hardware elements you can see.`
+4. Upload `sample-assets/gb10-partner-overview.pdf`.
+5. Ask: `Summarize this PDF for a partner evaluating a GB10-class local AI system.`
+6. Upload `sample-assets/gb10-demo-walkthrough-1080p.mp4`.
+7. Ask: `Describe what happens in this video and list the main demo steps.`
+8. Ask: `Can this host reach nvidia.com?`
 
 The web UI also renders PDF pages and chunks larger video uploads before sending them to Omni.
 

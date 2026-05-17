@@ -1,0 +1,63 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Length 587 >>
+stream
+q
+1 1 1 rg 0 0 612 792 re f
+0 0 0 rg
+BT /F1 28 Tf 72 740 Td (GB10-Class AI System Overview) Tj ET
+BT /F1 16 Tf 72 704 Td (Partner demo sample document) Tj ET
+BT /F1 18 Tf 86 650 Td (- Compact GB10-class desktop AI system.) Tj ET
+BT /F1 18 Tf 86 612 Td (- Local inference analyzes images, PDFs, and video.) Tj ET
+BT /F1 18 Tf 86 574 Td (- Setup: connect display, keyboard, mouse, network, power.) Tj ET
+BT /F1 18 Tf 86 536 Td (- Keep samples generic for partner-branded systems.) Tj ET
+BT /F1 16 Tf 72 464 Td (Use this page as a readable document sample for the Hermes Omni demo.) Tj ET
+Q
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Length 509 >>
+stream
+q
+1 1 1 rg 0 0 612 792 re f
+0 0 0 rg
+BT /F1 30 Tf 72 740 Td (Demo Workflow) Tj ET
+BT /F1 18 Tf 86 660 Td (1. Inspect a board or system image and describe visible hardware.) Tj ET
+BT /F1 18 Tf 86 620 Td (2. Summarize a short setup note or quick-start document.) Tj ET
+BT /F1 18 Tf 86 580 Td (3. Review a 1920 x 1080 product-context video.) Tj ET
+BT /F1 18 Tf 86 540 Td (4. Test external connectivity and policy blocking.) Tj ET
+BT /F1 16 Tf 72 456 Td (The sample uses partner-ready GB10-class wording.) Tj ET
+Q
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 6 0 R >>
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000127 00000 n 
+0000000197 00000 n 
+0000000835 00000 n 
+0000000961 00000 n 
+0000001521 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+1647
+%%EOF
