@@ -50,6 +50,17 @@ export HF_TOKEN="hf_..."
 ./install.sh
 ```
 
+This demo was created and tested with OpenClaw CLI `2026.5.12`. The installer
+uses that version by default. To intentionally test a different OpenClaw
+release, pass it through the install command:
+
+```bash
+OPENCLAW_CLI_VERSION=2026.5.12 ./install.sh
+```
+
+Use `OPENCLAW_CLI_VERSION=latest ./install.sh` only when validating the latest
+OpenClaw release.
+
 The installer prompts for sudo when needed. Passwordless sudo is not required,
 but first-time setup must run from an interactive terminal or SSH session with a
 TTY.
@@ -208,6 +219,7 @@ The web UI also renders PDF pages and chunks larger video uploads before sending
 
 ```bash
 PORT=8766 ./start.sh                  # use a different web port
+OPENCLAW_CLI_VERSION=2026.5.12 ./install.sh  # install the tested OpenClaw CLI version
 START_WEB=false ./start.sh            # start only local model services
 START_GATEWAY=false ./start.sh        # skip the OpenClaw dashboard
 STOP_MODEL=false ./stop.sh            # leave vLLM running

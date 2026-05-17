@@ -46,12 +46,32 @@ fi
 
 openclaw_require_node22
 
-if ! command -v openclaw >/dev/null 2>&1; then
-    echo "[prereqs] Installing OpenClaw CLI"
-    npm install -g openclaw@latest
-else
-    echo "[prereqs] OpenClaw already installed: $(openclaw --version)"
-fi
+OPENCLAW_CLI_VERSION="${OPENCLAW_CLI_VERSION:-2026.5.12}"
+
+openclaw_installed_version() {
+    openclaw --version 2>/dev/null | grep -Eo 'v?[0-9]{4}\.[0-9]+\.[0-9]+([-.][[:alnum:].]+)?' | head -n 1 | sed 's/^v//'
+}
+
+install_openclaw_cli() {
+    local installed=""
+    if command -v openclaw >/dev/null 2>&1; then
+        installed="$(openclaw_installed_version || true)"
+    fi
+
+    if [ "$OPENCLAW_CLI_VERSION" != "latest" ] && [ -n "$installed" ] && [ "$installed" = "$OPENCLAW_CLI_VERSION" ]; then
+        echo "[prereqs] OpenClaw already installed: $(openclaw --version)"
+        return 0
+    fi
+
+    if [ -n "$installed" ]; then
+        echo "[prereqs] Installing OpenClaw CLI ${OPENCLAW_CLI_VERSION} (current: $(openclaw --version))"
+    else
+        echo "[prereqs] Installing OpenClaw CLI ${OPENCLAW_CLI_VERSION}"
+    fi
+    npm install -g "openclaw@${OPENCLAW_CLI_VERSION}"
+}
+
+install_openclaw_cli
 
 if [ "${OPENCLAW_SKIP_OLLAMA_INSTALL:-0}" != "1" ]; then
     bash "$SCRIPT_DIR/install-ollama.sh"

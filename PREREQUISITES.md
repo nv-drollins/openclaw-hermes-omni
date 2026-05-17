@@ -24,7 +24,7 @@ bash scripts/install-host-prereqs.sh
 ## Runtime Tools
 
 - Node.js 22 and npm, installed through nvm if missing.
-- OpenClaw CLI, installed through npm if missing.
+- OpenClaw CLI `2026.5.12`, installed through npm by default; override with `OPENCLAW_CLI_VERSION`.
 - Ollama 0.22.1 or newer enough to serve `gemma4:latest`.
 - Docker Engine.
 - NVIDIA Container Toolkit configured for Docker GPU containers.
