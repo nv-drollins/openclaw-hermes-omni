@@ -23,19 +23,15 @@ nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
 
 This demo requires a Hugging Face token and a large local checkpoint download.
 
-- Hugging Face token required: set `HF_TOKEN` before downloading.
+- Hugging Face token required: set `HF_TOKEN` before running `./install.sh`.
 - Model access may be gated: accept the model terms for
   `nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4` if the download is
   denied.
 - Download size: about 22 GB for the local Omni checkpoint.
 - Destination: `$HOME/models/nemotron-3-nano-omni-nvfp4`.
 
-Download the model before the first full start:
-
-```bash
-export HF_TOKEN="hf_..."
-bash scripts/download-model.sh
-```
+The First Deploy commands below include `HF_TOKEN`. If the checkpoint is not
+already present, `./install.sh` downloads it automatically.
 
 ## First Deploy
 
@@ -50,6 +46,7 @@ chmod +x install.sh start.sh stop.sh restart.sh scripts/*.sh
 Install host prerequisites and launch the first run:
 
 ```bash
+export HF_TOKEN="hf_..."
 ./install.sh
 ```
 
@@ -76,12 +73,6 @@ newgrp docker
 ```
 
 That lets normal Docker commands work without `sudo` in your interactive shell.
-If you already manage Docker/NVIDIA Container Toolkit yourself, skip this repo's
-Docker setup with:
-
-```bash
-HERMES_SKIP_DOCKER_SETUP=1 ./install.sh
-```
 
 ## Hugging Face Model
 
@@ -91,7 +82,8 @@ The start script expects the local Omni checkpoint at:
 $HOME/models/nemotron-3-nano-omni-nvfp4
 ```
 
-Download it with:
+Normally `./install.sh` downloads this checkpoint automatically when `HF_TOKEN`
+is set. To download it explicitly instead:
 
 ```bash
 export HF_TOKEN="hf_..."
@@ -199,6 +191,8 @@ START_GATEWAY=false ./start.sh        # skip the OpenClaw dashboard
 STOP_MODEL=false ./stop.sh            # leave vLLM running
 OPENCLAW_CHAT_BACKEND=openclaw ./start.sh
 OPENCLAW_OLLAMA_CONTEXT_WINDOW=4096 ./start.sh
+HERMES_SKIP_DOCKER_SETUP=1 ./install.sh      # skip Docker/NVIDIA setup if already managed
+HERMES_SKIP_MODEL_DOWNLOAD=1 ./install.sh    # skip automatic HF model download
 ```
 
 By default the web UI uses the direct local backend for responsiveness. The OpenClaw profile and skills are still installed and can be tested through `scripts/run-openclaw-smoke.sh` or by setting `OPENCLAW_CHAT_BACKEND=openclaw`.

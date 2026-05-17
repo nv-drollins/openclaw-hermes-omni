@@ -51,11 +51,13 @@ first install so your interactive shell sees the new Docker group membership.
   - May require accepting model terms on Hugging Face before download.
   - Downloads about 22 GB into `$HOME/models/nemotron-3-nano-omni-nvfp4`.
 
-The Hugging Face model may be gated. Export `HF_TOKEN` before running:
+The Hugging Face model may be gated. Export `HF_TOKEN` before running
+`./install.sh`; the installer downloads the checkpoint automatically when it is
+missing:
 
 ```bash
 export HF_TOKEN="hf_..."
-bash scripts/download-model.sh
+./install.sh
 ```
 
 ## Ports
